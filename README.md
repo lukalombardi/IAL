@@ -9,17 +9,56 @@ Sin frameworks ni librerías: las partículas son Canvas 2D a mano.
 
 ## Correr el proyecto
 
+> El sitio **no está desplegado todavía**. Por ahora se trabaja en local.
+
+### Lo único que hace falta
+
+**Node.js 20 o más nuevo.** Nada más: ni base de datos, ni backend, ni claves.
+Para ver qué versión tenés:
+
+```bash
+node -v
+```
+
+Si el comando no existe o el número es menor a 20, bajá la versión LTS de
+<https://nodejs.org> (el instalador de Windows ya trae npm) y cerrá y volvé a
+abrir la terminal.
+
+### Primera vez
+
+```bash
+git clone https://github.com/lukalombardi/IAL.git
+```
+
+```bash
+cd IAL
+```
+
 ```bash
 npm install
 ```
+
+Esto crea la carpeta `node_modules`, que **no se sube al repo**: cada uno la
+genera en su máquina.
+
+### Cada vez que quieras trabajar
 
 ```bash
 npm run dev
 ```
 
-Queda en <http://localhost:5173>.
+Abrí <http://localhost:5173>. Lo que guardes se actualiza solo en el navegador,
+no hace falta recargar. Para cortar el servidor, `Ctrl + C` en la terminal.
 
-Build de producción y chequeo local del build:
+### Antes de ponerte a tocar algo
+
+```bash
+git pull
+```
+
+Si el `pull` trae cambios en `package.json`, volvé a correr `npm install`.
+
+### Para ver cómo queda el sitio compilado
 
 ```bash
 npm run build
@@ -28,6 +67,54 @@ npm run build
 ```bash
 npm run preview
 ```
+
+`build` genera la carpeta `dist` (tampoco se sube al repo) y `preview` la sirve
+para mirarla como va a quedar publicada.
+
+---
+
+## Si algo no arranca
+
+**`vite` no se reconoce como comando** — te falta el `npm install`, o lo
+corriste en otra carpeta. Asegurate de estar parado dentro de `IAL`.
+
+**`Port 5173 is in use`** — ya lo tenés abierto en otra terminal, o lo dejaste
+corriendo. Cerralo, o levantalo en otro puerto:
+
+```bash
+npm run dev -- --port 5174
+```
+
+**`npm warn install-scripts ... esbuild`** — es un aviso normal de npm 12, no
+un error. El proyecto compila igual; está verificado desde un clon limpio.
+
+**La página se ve en blanco unos segundos al abrir** — es la animación de
+entrada. Si no querés esperarla, tocá cualquier tecla, hacé scroll o usá el
+botón "Saltar intro".
+
+**Cambiaste un color y no pasa nada** — fijate que lo estés tocando en
+`src/styles/tokens.css`. El resto del CSS no tiene colores propios, todos
+salen de ahí.
+
+---
+
+## Cómo trabajamos entre varios
+
+Para no pisarnos, cada cambio en su propia rama:
+
+```bash
+git checkout -b lo-que-estas-haciendo
+```
+
+Cuando esté listo, lo subís y abrís un Pull Request en GitHub para que el resto
+lo mire antes de que entre a `main`:
+
+```bash
+git push -u origin lo-que-estas-haciendo
+```
+
+`node_modules` y `dist` están ignorados a propósito: se regeneran solos y, si se
+suben, generan conflictos en cada commit.
 
 ---
 
@@ -157,6 +244,10 @@ Nada queda en `opacity: 0` esperando scroll: el estado final de la página es si
 ---
 
 ## Publicar
+
+> **Todavía no publicamos.** Mientras la sigamos desarrollando, se trabaja en
+> local con `npm run dev`. Lo que sigue queda anotado para cuando decidamos
+> sacarla, y la config ya está lista.
 
 El sitio es estático: cualquier hosting sirve. `base: "./"` en `vite.config.js` hace que funcione
 también en subcarpetas.
