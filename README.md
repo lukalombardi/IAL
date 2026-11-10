@@ -1,9 +1,7 @@
 # IAL — Landing
 
-Sitio estático de IAL (Ismael · Agustín · Luca). HTML + CSS + JS vanilla sobre Vite.
+Sitio de IAL (Ismael · Agustín · Luca). HTML + CSS + JS vanilla sobre Vite.
 Sin frameworks ni librerías: las partículas son Canvas 2D a mano.
-
-**Peso del build:** ~6 kB de JS y ~5 kB de CSS (gzip), más las fuentes de Google.
 
 ---
 
