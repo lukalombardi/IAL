@@ -98,7 +98,7 @@ salen de ahí.
 
 ---
 
-## Cómo trabajamos entre varios
+## Trabajar en ramas
 
 Para no pisarnos, cada cambio en su propia rama:
 
@@ -209,37 +209,6 @@ const T = { scatter: 0, converge: 520, consolidate: 2090, travel: 2400, cleanup:
 
 Milisegundos desde que carga la página. La cantidad de partículas está en `particles.js`
 (`get budget()`): 1100 en desktop, 520 en mobile.
-
----
-
-## Cómo funciona la intro
-
-1. Arrancan partículas dispersas en posiciones aleatorias, con fade in escalonado.
-2. El logo se rasteriza en un canvas **offscreen**, se lee con `getImageData` y cada píxel opaco
-   se convierte en el destino de una partícula. Cada una viaja por una curva Bézier con easing.
-3. Ya armado, el logo vectorial nítido reemplaza a las partículas, que se apagan.
-4. El logo viaja al header achicándose (FLIP) y girando 120°, mientras las secciones se revelan
-   con un fade/slide escalonado.
-5. Terminada la intro, el mismo canvas pasa a modo ambiente: pocas partículas, deriva lenta.
-
-Detalles que importan:
-
-- **Las fases se miden en tiempo real** (`performance.now`), no en deltas de frame acumulados.
-  Si el navegador tira frames o throttlea la pestaña, la animación sigue coincidiendo con la
-  línea de tiempo en vez de quedarse atrás.
-- Se **pausa sola** cuando la pestaña queda oculta (`visibilitychange`).
-- Se puede **saltar** con el botón, una tecla, scroll o un click.
-- El CSS entra por `<link>` y no por `import` de JS, así bloquea el primer pintado: la página
-  nunca se muestra armada para después esconderse.
-- Hay un **failsafe de 6 s** en el `<script>` del `<head>`: pase lo que pase con el JS, la página
-  queda completa y legible.
-
-### prefers-reduced-motion
-
-Si está activo, no se agrega la clase `is-intro`, el módulo de la intro ni se descarga y el CSS
-fuerza el estado final. La página aparece completa y armada al instante.
-
-Nada queda en `opacity: 0` esperando scroll: el estado final de la página es siempre visible.
 
 ---
 
