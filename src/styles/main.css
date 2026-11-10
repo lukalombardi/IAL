@@ -6,6 +6,8 @@
 /* ==========================================================================
    prefers-reduced-motion
    La pagina se muestra completa y armada al instante. Sin intro, sin vuelo.
+   Lo que queda cambia de estado al instante o solo con opacidad: nunca se
+   desplaza ni escala, y ningun estado se comunica solo con movimiento.
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -23,5 +25,8 @@
 
   [data-reveal] { opacity: 1 !important; transform: none !important; }
 
-  .btn:hover, .card:hover, .project:hover { transform: none; }
+  /* El panel de navegacion aparece y desaparece sin desplazamiento. */
+  .nav { transform: none !important; transition-delay: 0s !important; }
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after { transition: none !important; }
 }

@@ -6,13 +6,15 @@
 
 .mark { width: 1em; height: 1em; color: var(--n-1000); flex: none; }
 
+/* El peso maximo del sistema es 600: el extra de presencia lo da el eje de
+   ancho de Archivo, no un 700. */
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: var(--sp-2);
   font-family: var(--font-display);
-  font-weight: 700;
-  font-stretch: 112%;
+  font-weight: var(--fw-semibold);
+  font-stretch: 118%;
   font-size: var(--fs-lg);
   letter-spacing: 0.02em;
   color: var(--text-1);
@@ -29,86 +31,70 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.35rem;
+  gap: var(--sp-2);
+  min-height: var(--hit);
+  padding: var(--sp-3) var(--sp-5);
   background: var(--btn-bg);
   color: var(--btn-fg);
   border: 1px solid var(--btn-bd);
   border-radius: var(--r-sm);
   font-size: var(--fs-sm);
-  font-weight: 500;
-  line-height: 1;
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
   white-space: nowrap;
   transition:
     background-color var(--dur-2) var(--ease-out),
     border-color var(--dur-2) var(--ease-out),
-    color var(--dur-2) var(--ease-out),
-    transform var(--dur-2) var(--ease-out);
+    color var(--dur-2) var(--ease-out);
 }
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(0); }
 
 .btn--primary {
   --btn-bg: var(--n-1000);
   --btn-fg: var(--text-on-light);
   --btn-bd: var(--n-1000);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
 }
 .btn--primary:hover { --btn-bg: var(--accent-bright); --btn-bd: var(--accent-bright); }
 
 .btn--ghost { --btn-bg: var(--surface-1); }
 .btn--ghost:hover { --btn-bg: var(--surface-3); --btn-bd: var(--border-strong); }
 
-.btn--sm { padding: 0.55rem 0.9rem; font-size: var(--fs-xs); }
-
-.btn__arrow {
-  width: 0.75em;
-  height: 0.75em;
-  transition: transform var(--dur-2) var(--ease-out);
+/* Chico a la vista, pero el area tactil sigue siendo de 44px. */
+.btn--sm {
+  min-height: 36px;
+  padding: var(--sp-2) var(--sp-3);
 }
-.btn:hover .btn__arrow { transform: translateX(3px); }
-
-/* ---- Link con subrayado que barre ------------------------------------- */
-
-.link {
-  position: relative;
-  color: var(--text-1);
-  font-weight: 500;
-  padding-bottom: 1px;
-}
-.link::after {
+.btn--sm::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform var(--dur-3) var(--ease-out);
+  inset: -4px;
 }
-.link:hover::after { transform: scaleX(1); transform-origin: left; }
 
-/* ---- Chips / tags ------------------------------------------------------ */
+.btn[aria-busy="true"] { color: var(--text-on-light); opacity: 0.72; cursor: progress; }
+
+/* ---- Chips / tags ------------------------------------------------------
+   Etiquetas tecnicas, no pastillas decorativas: mismo radio chico que el
+   resto del sistema.                                                       */
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.3rem 0.7rem;
+  padding: var(--sp-1) var(--sp-2);
   border: 1px solid var(--border);
-  border-radius: var(--r-pill);
+  border-radius: var(--r-xs);
   background: var(--surface-1);
   font-family: var(--font-mono);
-  font-size: var(--fs-3xs);
-  letter-spacing: var(--tr-wide);
-  text-transform: uppercase;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.02em;
   color: var(--text-3);
   white-space: nowrap;
 }
 
-.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 
-/* ---- Card con glow que sigue al puntero -------------------------------- */
+/* ---- Card con glow que sigue al puntero --------------------------------
+   Un solo efecto de hover: el resplandor. Sin levantar la card ni sumar
+   filetes; el borde apenas sube de contraste.                              */
 
 .card {
   --glow-x: 50%;
@@ -121,8 +107,7 @@
   padding: clamp(1.5rem, 1.1rem + 1.3vw, 2.25rem);
   transition:
     border-color var(--dur-3) var(--ease-out),
-    background-color var(--dur-3) var(--ease-out),
-    transform var(--dur-3) var(--ease-out);
+    background-color var(--dur-3) var(--ease-out);
 }
 .card::before {
   content: "";
@@ -136,42 +121,34 @@
     transparent 65%
   );
   opacity: 0;
-  transition: opacity var(--dur-3) var(--ease-out);
-}
-.card::after {
-  content: "";
-  position: absolute;
-  top: -1px; left: 1.5rem; right: 1.5rem;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-line), transparent);
-  opacity: 0;
-  transition: opacity var(--dur-3) var(--ease-out);
+  transition: opacity var(--dur-4) var(--ease-out);
 }
 .card:hover {
   border-color: var(--border-mid);
   background: var(--surface-2);
-  transform: translateY(-2px);
 }
-.card:hover::before, .card:hover::after { opacity: 1; }
+.card:hover::before { opacity: 1; }
 
-/* ---- Header ------------------------------------------------------------ */
+/* ---- Header ------------------------------------------------------------
+   Sin backdrop-filter: el fondo opaco del header es el mismo negro de la
+   pagina, asi que no se pierde nada y el scroll no repinta el blur.        */
 
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: var(--z-header);
-  height: var(--header-h);
+  min-height: var(--header-h);
   display: flex;
   align-items: center;
+  background: transparent;
   border-bottom: 1px solid transparent;
   transition:
     background-color var(--dur-3) var(--ease-out),
     border-color var(--dur-3) var(--ease-out);
 }
-.header.is-stuck {
-  background: rgb(5 5 7 / 0.72);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
+.header.is-stuck,
+.header[data-nav="open"] {
+  background: var(--bg);
   border-bottom-color: var(--border);
 }
 
@@ -188,17 +165,21 @@
 
 /* El logo del header es el destino del vuelo de particulas.
    Aparece recien cuando el logo volador aterriza (fin de .is-landing). */
-#brandMark { opacity: 1; transition: opacity 220ms linear; }
+#brandMark { opacity: 1; transition: opacity var(--dur-2) linear; }
 html.is-intro #brandMark,
 html.is-landing #brandMark { opacity: 0; }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 0.4rem + 1.6vw, 2rem);
+  gap: clamp(0.5rem, 0.1rem + 1.2vw, 1.25rem);
 }
 .nav__link {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  padding-inline: var(--sp-2);
   font-size: var(--fs-sm);
   color: var(--text-3);
   transition: color var(--dur-2) var(--ease-out);
@@ -206,7 +187,8 @@ html.is-landing #brandMark { opacity: 0; }
 .nav__link::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: -6px;
+  left: var(--sp-2); right: var(--sp-2);
+  top: calc(50% + 0.75rem);
   height: 1px;
   background: var(--accent);
   transform: scaleX(0);
@@ -216,8 +198,81 @@ html.is-landing #brandMark { opacity: 0; }
 .nav__link[aria-current="true"] { color: var(--text-1); }
 .nav__link[aria-current="true"]::after { transform: scaleX(1); }
 
+/* Boton de menu: solo existe en angosto. */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: var(--hit);
+  min-width: var(--hit);
+  padding-inline: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.nav-toggle__bars {
+  position: relative;
+  width: 16px;
+  height: 9px;
+  flex: none;
+}
+.nav-toggle__bars::before,
+.nav-toggle__bars::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: currentColor;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.nav-toggle__bars::before { top: 0; }
+.nav-toggle__bars::after { bottom: 0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars::before { transform: translateY(4px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars::after { transform: translateY(-4px) rotate(-45deg); }
+
+/* Solo aparece dentro del panel desplegable. */
+.nav__link--menu-only { display: none; }
+
 @media (max-width: 860px) {
-  .nav { display: none; }
+  .nav-toggle { display: inline-flex; }
+  .header__inner > .btn { display: none; }
+  .nav__link--menu-only { display: inline-flex; }
+
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--sp-2) var(--gutter) var(--sp-4);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+      opacity var(--dur-3) var(--ease-out),
+      transform var(--dur-3) var(--ease-out),
+      visibility 0s linear var(--dur-3);
+  }
+  .header[data-nav="open"] .nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  .nav__link {
+    padding-inline: 0;
+    font-size: var(--fs-md);
+    color: var(--text-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__link:last-child { border-bottom: 0; }
+  .nav__link::after { display: none; }
 }
 
 /* ---- Intro (canvas + logo volador) ------------------------------------- */
@@ -254,18 +309,21 @@ html:not(.is-intro):not(.is-landing) .intro-logo { display: none; }
   left: 50%;
   translate: -50% 0;
   z-index: calc(var(--z-intro) + 2);
-  padding: 0.5rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: var(--r-pill);
-  background: rgb(5 5 7 / 0.5);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-sm);
+  background: var(--bg);
   font-family: var(--font-mono);
-  font-size: var(--fs-3xs);
-  letter-spacing: var(--tr-wider);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tr-wide);
   text-transform: uppercase;
-  color: var(--text-4);
-  transition: color var(--dur-2), border-color var(--dur-2);
+  color: var(--text-3);
+  transition: color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
 }
-.intro-skip:hover { color: var(--text-2); border-color: var(--border-mid); }
+.intro-skip:hover { color: var(--text-1); border-color: var(--border-strong); }
 html:not(.is-intro) .intro-skip { display: none; }
 
 /* ---- Revelado escalonado post-intro ------------------------------------ */
@@ -274,8 +332,8 @@ html:not(.is-intro) .intro-skip { display: none; }
 
 [data-reveal] {
   transition:
-    opacity var(--dur-4) var(--ease-out),
-    transform var(--dur-4) var(--ease-out);
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
 }
 html.is-intro [data-reveal] {
   opacity: 0;

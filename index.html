@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
 />
 
 <link rel="stylesheet" href="./src/styles/main.css" />
@@ -55,10 +55,6 @@
       </g>
     </symbol>
 
-    <symbol id="i-arrow" viewBox="0 0 16 16">
-      <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M3 8h10M9 4l4 4-4 4" />
-    </symbol>
-
     <symbol id="i-node" viewBox="0 0 16 16">
       <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M2.5 8h4l2-4 2 8 2-4h1" />
     </symbol>
@@ -87,12 +83,16 @@
       <a class="nav__link" href="#integracion">Integración</a>
       <a class="nav__link" href="#proyectos">Proyectos</a>
       <a class="nav__link" href="#equipo">Equipo</a>
+      <a class="nav__link nav__link--menu-only" href="#contacto">Contacto</a>
     </nav>
 
-    <a class="btn btn--ghost btn--sm" href="#contacto">
-      Contacto
-      <svg class="btn__arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
-    </a>
+    <button class="nav-toggle" id="navToggle" type="button"
+            aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      Menú
+    </button>
+
+    <a class="btn btn--ghost btn--sm" href="#contacto">Contacto</a>
   </div>
 </header>
 
@@ -104,7 +104,7 @@
 
       <h1 class="hero__title" data-reveal>
         Sistemas a medida,<br />
-        con <em>criterio de ingeniería</em>.
+        con criterio de ingeniería.
       </h1>
 
       <p class="hero__sub" data-reveal>
@@ -114,10 +114,7 @@
       </p>
 
       <div class="hero__actions" data-reveal>
-        <a class="btn btn--primary" href="#proyectos">
-          Ver proyectos
-          <svg class="btn__arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
-        </a>
+        <a class="btn btn--primary" href="#proyectos">Ver proyectos</a>
         <a class="btn btn--ghost" href="#contacto">Contanos tu idea</a>
       </div>
 
@@ -138,7 +135,6 @@
   <section class="section" id="servicios">
     <div class="shell">
       <header class="section__head" data-reveal>
-        <p class="eyebrow">Qué hacemos</p>
         <h2 class="section__title">Tres cosas, bien hechas.</h2>
         <p class="section__lede">
           No somos una agencia que hace de todo. Nos especializamos en lo que una empresa
@@ -148,7 +144,6 @@
 
       <div class="services__grid">
         <article class="card service" data-reveal>
-          <span class="service__index">01</span>
           <h3 class="service__title">Sistemas a medida</h3>
           <p class="service__body">
             Software de gestión construido alrededor de cómo trabaja tu rubro, no al revés.
@@ -163,7 +158,6 @@
         </article>
 
         <article class="card service" data-reveal>
-          <span class="service__index">02</span>
           <h3 class="service__title">Automatización y chatbots</h3>
           <p class="service__body">
             Bots de WhatsApp y flujos en n8n que se ocupan de lo repetitivo: responder
@@ -178,7 +172,6 @@
         </article>
 
         <article class="card service" data-reveal>
-          <span class="service__index">03</span>
           <h3 class="service__title">Bases de datos</h3>
           <p class="service__body">
             Modelado y esquemas sobre PostgreSQL y Supabase. Pensamos la estructura antes de
@@ -202,7 +195,7 @@
         <div data-reveal>
           <p class="eyebrow">El diferencial</p>
           <h2 class="integration__title">
-            No entregamos tres herramientas. Entregamos <b>un sistema</b>.
+            No entregamos tres herramientas. Entregamos un sistema.
           </h2>
           <p class="integration__body">
             La mayoría resuelve una parte: te hacen el sistema, o el bot, o la base. Después
@@ -258,7 +251,6 @@
   <section class="section" id="proyectos">
     <div class="shell">
       <header class="section__head" data-reveal>
-        <p class="eyebrow">Portfolio</p>
         <h2 class="section__title">Trabajo en producción.</h2>
         <p class="section__lede">
           No son maquetas ni ejercicios de cursada. Son sistemas que hoy usa gente todos
@@ -268,10 +260,7 @@
 
       <div class="projects__list">
         <article class="project" data-reveal>
-          <div class="project__meta">
-            <span class="project__index">01</span>
-            <span class="project__status">En producción</span>
-          </div>
+          <p class="project__status">En producción</p>
           <div>
             <h3 class="project__title">Sistema de gestión para el agro</h3>
             <p class="project__body">
@@ -288,10 +277,7 @@
         </article>
 
         <article class="project" data-reveal>
-          <div class="project__meta">
-            <span class="project__index">02</span>
-            <span class="project__status">En producción</span>
-          </div>
+          <p class="project__status">En producción</p>
           <div>
             <h3 class="project__title">Sistema para una inmobiliaria</h3>
             <p class="project__body">
@@ -308,10 +294,7 @@
         </article>
 
         <article class="project" data-reveal>
-          <div class="project__meta">
-            <span class="project__index">03</span>
-            <span class="project__status">En producción</span>
-          </div>
+          <p class="project__status">En producción</p>
           <div>
             <h3 class="project__title">Chatbot de WhatsApp para reventa de productos Apple</h3>
             <p class="project__body">
@@ -334,7 +317,6 @@
   <section class="section" id="equipo">
     <div class="shell">
       <header class="section__head" data-reveal>
-        <p class="eyebrow">Quiénes somos</p>
         <h2 class="section__title">Tres personas, un mismo criterio.</h2>
         <p class="section__lede">
           Analistas en Sistemas recibidos, estudiando Ingeniería en Sistemas. El nombre sale
@@ -391,7 +373,6 @@
     <div class="shell">
       <div class="contact__grid">
         <div data-reveal>
-          <p class="eyebrow">Hablemos</p>
           <h2 class="contact__title">Contanos qué necesitás resolver.</h2>
           <p class="contact__lede">
             Escribinos con el problema, no con la solución. De pensar cómo se resuelve nos
@@ -405,7 +386,7 @@
               <span class="mailbox__value" id="contactEmail">hola@ial.dev</span>
             </div>
             <button class="btn btn--ghost btn--sm" type="button" id="copyEmail" data-copy-target="contactEmail">
-              Copiar
+              Copiar correo
             </button>
           </div>
         </div>
@@ -415,28 +396,32 @@
             <div class="field-group">
               <label for="f-nombre">Nombre</label>
               <input class="input" id="f-nombre" name="nombre" type="text" autocomplete="name"
-                     placeholder="Cómo te llamás" required />
+                     aria-describedby="e-nombre" required />
               <p class="field-error" id="e-nombre" aria-live="polite"></p>
             </div>
 
             <div class="field-group">
               <label for="f-correo">Correo</label>
+              <p class="field-hint" id="h-correo">Ahí te respondemos.</p>
               <input class="input" id="f-correo" name="correo" type="email" autocomplete="email"
-                     inputmode="email" placeholder="donde podemos responderte" required />
+                     inputmode="email" placeholder="nombre@empresa.com"
+                     aria-describedby="h-correo e-correo" required />
               <p class="field-error" id="e-correo" aria-live="polite"></p>
             </div>
 
             <div class="field-group">
               <label for="f-mensaje">Mensaje</label>
+              <p class="field-hint" id="h-mensaje">
+                Contanos qué hace tu negocio y qué te está costando resolver hoy.
+              </p>
               <textarea class="input" id="f-mensaje" name="mensaje" rows="5"
-                        placeholder="Qué hace tu negocio y qué te está costando resolver hoy" required></textarea>
+                        aria-describedby="h-mensaje e-mensaje" required></textarea>
               <p class="field-error" id="e-mensaje" aria-live="polite"></p>
             </div>
 
             <div class="form__actions">
               <button class="btn btn--primary" type="submit" id="formSubmit">
                 <span id="formSubmitLabel">Preparar mensaje</span>
-                <svg class="btn__arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
               </button>
               <p class="status-msg" id="formStatus" role="status" aria-live="polite"></p>
             </div>
@@ -470,7 +455,7 @@
       <span>IAL</span>
     </a>
     <div class="footer__meta">
-      <span>Ismael · Agustín · Luca</span>
+      <span>Ismael, Agustín y Luca</span>
       <span>Argentina</span>
       <span>&copy; <span id="year">2026</span></span>
     </div>

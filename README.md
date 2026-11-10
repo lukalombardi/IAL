@@ -81,6 +81,20 @@ No hay colores literales sueltos en el resto del CSS.
 
 El tema es un único modo oscuro declarado (`color-scheme: dark`). No hay modo claro.
 
+**Reglas del sistema que conviene no romper al editar:**
+
+- **Tres pesos y nada más**: 400 / 500 / 600 (`--fw-*`). Ninguno por encima de 600; el extra de
+  presencia de la marca sale del eje de ancho de Archivo (`font-stretch`), no de un 700.
+- **Piso de 12px**: la escala es 12 (meta) / 14 (secundario) / 16-17 (cuerpo) y de ahí para
+  arriba. Nada de texto por debajo de 12px, y el 12px es solo para metadatos.
+- **Contraste sobre `--bg`**: `--text-3` es 4.6:1 (mínimo AA para texto normal) y es el tono más
+  bajo admitido para contenido. `--text-4` es 3.3:1 y está reservado para `::placeholder`.
+- **Duraciones de la UI**: 100 / 150 / 200 / 300 ms (`--dur-1` … `--dur-4`). `--dur-reveal`
+  (600 ms) es la única excepción y pertenece a la coreografía de entrada.
+- **Área táctil de 44px** (`--hit`) en todo lo que se toca. Los botones chicos se ven chicos pero
+  amplían el área con un `::after`.
+- Sin `backdrop-filter`: el header opaco es del mismo negro que la página.
+
 ### Textos del equipo — `index.html`
 
 Buscá `<!-- EDITABLE -->` en la sección `#equipo`. Las bios de Ismael, Agustín y Luca están

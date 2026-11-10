@@ -52,7 +52,7 @@ function initCopyButtons() {
       if (!target) return;
       const text = "value" in target ? target.value : target.textContent.trim();
       const ok = await copyText(text);
-      flashButton(button, ok ? "Copiado" : "No se pudo");
+      flashButton(button, ok ? "Copiado" : "Copialo a mano");
     });
   });
 }
@@ -71,11 +71,21 @@ function buildMessage({ nombre, correo, mensaje }) {
   ].join("\n");
 }
 
+/* Una regla por campo: así se puede validar de a uno (al salir del campo)
+   o todos juntos (al enviar) sin duplicar los mensajes. */
+const RULES = {
+  nombre: (v) => (v.length < 2 ? "Escribí tu nombre para saber con quién hablamos." : ""),
+  correo: (v) => (EMAIL_RE.test(v) ? "" : "Escribí un correo con el formato nombre@empresa.com."),
+  mensaje: (v) =>
+    v.length < 10 ? "Contanos un poco más: con una línea alcanza." : "",
+};
+
 function validate(values) {
   const errors = {};
-  if (values.nombre.length < 2) errors.nombre = "Decinos cómo te llamás.";
-  if (!EMAIL_RE.test(values.correo)) errors.correo = "Revisá el correo: no parece válido.";
-  if (values.mensaje.length < 10) errors.mensaje = "Contanos un poco más (10 caracteres mínimo).";
+  Object.keys(RULES).forEach((key) => {
+    const message = RULES[key](values[key]);
+    if (message) errors[key] = message;
+  });
   return errors;
 }
 
@@ -113,36 +123,63 @@ function initForm() {
     }
   }
 
+  /* Un campo "virgen" nunca se marca en rojo: el error aparece recién cuando
+     el usuario sale del campo, y desaparece apenas vuelve a tocarlo. */
+  const touched = new Set();
+
+  function setError(key, message) {
+    errorNodes[key].textContent = message;
+    fields[key].setAttribute("aria-invalid", message ? "true" : "false");
+  }
+
+  function clearError(key) {
+    if (errorNodes[key].textContent) setError(key, "");
+  }
+
   function showErrors(errors) {
-    Object.keys(fields).forEach((key) => {
-      const message = errors[key] || "";
-      errorNodes[key].textContent = message;
-      fields[key].setAttribute("aria-invalid", message ? "true" : "false");
-      fields[key].setAttribute("aria-describedby", errorNodes[key].id);
-    });
-    const firstBad = Object.keys(errors)[0];
+    Object.keys(fields).forEach((key) => setError(key, errors[key] || ""));
+    const firstBad = Object.keys(fields).find((key) => errors[key]);
     if (firstBad) fields[firstBad].focus();
   }
 
-  // Limpiamos el error del campo apenas el usuario lo corrige.
   Object.keys(fields).forEach((key) => {
-    fields[key].addEventListener("input", () => {
-      if (errorNodes[key].textContent) {
-        errorNodes[key].textContent = "";
-        fields[key].setAttribute("aria-invalid", "false");
-      }
+    const input = fields[key];
+
+    // Primera salida del campo: recién ahí validamos.
+    input.addEventListener("blur", () => {
+      touched.add(key);
+      setError(key, RULES[key](input.value.trim()));
+    });
+
+    // Volver al campo limpia el error antes de escribir nada.
+    input.addEventListener("focus", () => clearError(key));
+
+    input.addEventListener("input", () => {
+      if (errorNodes[key].textContent) clearError(key);
+      else if (touched.has(key)) setError(key, RULES[key](input.value.trim()));
     });
   });
 
+  function setStatus(message, state) {
+    status.textContent = message;
+    if (state) status.setAttribute("data-state", state);
+    else status.removeAttribute("data-state");
+  }
+
+  let sending = false;
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    status.textContent = "";
+    if (sending) return;
+    setStatus("");
 
     const values = {
       nombre: fields.nombre.value.trim(),
       correo: fields.correo.value.trim(),
       mensaje: fields.mensaje.value.trim(),
     };
+
+    Object.keys(fields).forEach((key) => touched.add(key));
 
     const errors = validate(values);
     if (Object.keys(errors).length) {
@@ -156,8 +193,11 @@ function initForm() {
     const subject = "Consulta de " + values.nombre;
 
     if (hasEndpoint) {
-      submit.disabled = true;
-      status.textContent = "Enviando…";
+      // El botón nunca se deshabilita: se marca ocupado y se ignora el
+      // segundo click mientras el envío está en vuelo.
+      sending = true;
+      submit.setAttribute("aria-busy", "true");
+      setStatus("Enviando…");
       try {
         const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
@@ -165,11 +205,12 @@ function initForm() {
           body: JSON.stringify({ ...values, _subject: subject }),
         });
         if (!res.ok) throw new Error("HTTP " + res.status);
-        status.textContent = "Listo. Te respondemos a la brevedad.";
+        setStatus("Mensaje enviado. Te respondemos a la brevedad.");
         form.reset();
+        touched.clear();
         compose.hidden = true;
       } catch {
-        status.textContent = "No se pudo enviar. Te dejamos el mensaje para copiar.";
+        setStatus("El envío no salió. Te dejamos el mensaje listo para copiar.", "error");
         composeText.value = body;
         composeMail.href =
           "mailto:" + CONTACT_EMAIL +
@@ -177,7 +218,8 @@ function initForm() {
           "&body=" + encodeURIComponent(body);
         compose.hidden = false;
       } finally {
-        submit.disabled = false;
+        sending = false;
+        submit.removeAttribute("aria-busy");
       }
       return;
     }
@@ -189,7 +231,7 @@ function initForm() {
       "?subject=" + encodeURIComponent(subject) +
       "&body=" + encodeURIComponent(body);
     compose.hidden = false;
-    status.textContent = "Mensaje armado. Copialo o abrilo en tu correo.";
+    setStatus("Mensaje armado. Copialo o abrilo en tu correo.");
     composeText.focus();
   });
 }

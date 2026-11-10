@@ -1,6 +1,7 @@
 /* ==========================================================================
    IAL — Design tokens
    Committed dark theme. Un solo modo. Todo se define acá.
+   Ningún color literal vive fuera de este archivo.
    ========================================================================== */
 
 :root {
@@ -16,6 +17,7 @@
   --n-400: #24242f;
   --n-500: #33333f;
   --n-600: #4c4c5a;
+  --n-650: #5f5f6f;
   --n-700: #76768a;
   --n-800: #a6a6b6;
   --n-900: #d4d4de;
@@ -29,6 +31,14 @@
   --accent-soft: rgb(169 220 255 / 0.12);
   --accent-glow: rgb(169 220 255 / 0.07);
 
+  /* Velos de la atmosfera espacial del fondo (body::before) */
+  --veil-1: rgb(255 255 255 / 0.028);
+  --veil-2: rgb(255 255 255 / 0.022);
+
+  /* ---- Error: el unico color calido, solo para validacion ------------ */
+  --danger: #ffa7a7;
+  --danger-line: rgb(255 167 167 / 0.55);
+
   /* ---- Superficies --------------------------------------------------- */
   --bg: var(--n-050);
   --bg-deep: var(--n-000);
@@ -41,11 +51,16 @@
   --border-mid: rgb(255 255 255 / 0.12);
   --border-strong: rgb(255 255 255 / 0.2);
 
-  /* ---- Texto --------------------------------------------------------- */
+  /* ---- Texto ---------------------------------------------------------
+     Contraste medido sobre --bg (#050507):
+       text-1  17.9:1   text-2  9.9:1
+       text-3   4.6:1 — minimo AA para texto normal
+       text-4   3.3:1 — SOLO adornos y placeholders, nunca contenido
+     ------------------------------------------------------------------- */
   --text-1: var(--n-950);
   --text-2: var(--n-800);
   --text-3: var(--n-700);
-  --text-4: var(--n-600);
+  --text-4: var(--n-650);
   --text-on-light: var(--n-050);
 
   /* ---- Tipografia ---------------------------------------------------- */
@@ -53,64 +68,72 @@
   --font-body: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
-  /* Escala tipografica fluida (1.25 aprox., anclada a 16px) */
-  --fs-3xs: 0.6875rem;  /* 11 */
-  --fs-2xs: 0.75rem;    /* 12 */
-  --fs-xs:  0.8125rem;  /* 13 */
-  --fs-sm:  0.875rem;   /* 14 */
-  --fs-md:  clamp(0.9375rem, 0.91rem + 0.14vw, 1rem);
+  /* Tres pesos, ninguno por encima de 600. La jerarquia la hace el tamaño. */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* Escala tipografica. Piso de 12px: nada de texto mas chico.
+     meta 12 / secundario 14 / cuerpo 16-17, y de ahi para arriba. */
+  --fs-2xs: 0.75rem;    /* 12 — meta: etiquetas, chips, pie */
+  --fs-sm:  0.875rem;   /* 14 — secundario: bios, notas, botones */
+  --fs-md:  clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);  /* 16-17 — cuerpo */
   --fs-lg:  clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
   --fs-xl:  clamp(1.25rem, 1.14rem + 0.5vw, 1.5rem);
   --fs-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
   --fs-3xl: clamp(2rem, 1.55rem + 2.1vw, 3.25rem);
   --fs-4xl: clamp(2.5rem, 1.6rem + 4.1vw, 5.25rem);
 
-  --lh-tight: 1.02;
-  --lh-snug: 1.14;
-  --lh-head: 1.22;
-  --lh-body: 1.62;
-  --lh-loose: 1.75;
+  --lh-tight: 1.1;   /* display */
+  --lh-head: 1.22;   /* titulos */
+  --lh-body: 1.6;    /* cuerpo */
 
-  --tr-tight: -0.03em;
-  --tr-snug: -0.018em;
+  /* Tracking negativo solo a partir de 2rem; por debajo, normal. */
+  --tr-tight: -0.022em;
+  --tr-snug: -0.014em;
   --tr-normal: 0em;
   --tr-wide: 0.08em;
   --tr-wider: 0.16em;
 
-  /* ---- Espaciado (base 4px) ------------------------------------------ */
-  --sp-1: 0.25rem;
-  --sp-2: 0.5rem;
-  --sp-3: 0.75rem;
-  --sp-4: 1rem;
-  --sp-5: 1.5rem;
-  --sp-6: 2rem;
-  --sp-7: 2.5rem;
-  --sp-8: 3rem;
-  --sp-9: 4rem;
-  --sp-10: 5rem;
-  --sp-11: 6.5rem;
-  --sp-12: 8rem;
+  /* ---- Espaciado (base 4px; los saltos grandes, multiplos de 8) ------ */
+  --sp-1: 0.25rem;   /* 4  */
+  --sp-2: 0.5rem;    /* 8  */
+  --sp-3: 0.75rem;   /* 12 */
+  --sp-4: 1rem;      /* 16 */
+  --sp-5: 1.5rem;    /* 24 */
+  --sp-6: 2rem;      /* 32 */
+  --sp-7: 2.5rem;    /* 40 */
+  --sp-8: 3rem;      /* 48 */
+  --sp-9: 4rem;      /* 64 */
+  --sp-10: 5rem;     /* 80 */
+  --sp-11: 6.5rem;   /* 104 */
+  --sp-12: 8rem;     /* 128 */
 
   --section-y: clamp(5rem, 3rem + 8vw, 9.5rem);
   --gutter: clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
-  --measure: 62ch;
   --maxw: 76rem;
-  --maxw-narrow: 54rem;
+
+  /* Area tactil minima (WCAG AA). */
+  --hit: 44px;
 
   /* ---- Radios (contenidos, nada de rounded-lg en todo) --------------- */
   --r-xs: 2px;
   --r-sm: 3px;
   --r-md: 5px;
-  --r-pill: 999px;
 
-  /* ---- Movimiento ----------------------------------------------------- */
+  /* ---- Movimiento -----------------------------------------------------
+     Duraciones de la UI: 100 / 150 / 200 / 300ms y nada mas.
+     --dur-reveal es la unica excepcion documentada: forma parte de la
+     coreografia de entrada (un solo momento orquestado), no del chrome.
+     ------------------------------------------------------------------- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-travel: cubic-bezier(0.72, 0, 0.14, 1);
-  --dur-1: 120ms;
-  --dur-2: 220ms;
-  --dur-3: 420ms;
-  --dur-4: 700ms;
+  --dur-1: 100ms;
+  --dur-2: 150ms;
+  --dur-3: 200ms;
+  --dur-4: 300ms;
+  --dur-reveal: 600ms;
 
   /* ---- Capas ---------------------------------------------------------- */
   --z-field: 0;
@@ -122,5 +145,5 @@
 }
 
 @media (max-width: 640px) {
-  :root { --header-h: 58px; }
+  :root { --header-h: 60px; }
 }
