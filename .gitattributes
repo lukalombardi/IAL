@@ -1,0 +1,12 @@
+# Normaliza finales de linea: en el repo siempre LF, sin importar el SO
+# de cada uno. Evita diffs de archivos enteros entre Windows y Mac/Linux.
+* text=auto eol=lf
+
+# Binarios: que git no los toque
+*.jpg  -text
+*.jpeg -text
+*.png  -text
+*.webp -text
+*.ico  -text
+*.woff  -text
+*.woff2 -text
