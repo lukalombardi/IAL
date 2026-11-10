@@ -1,0 +1,27 @@
+@import "./tokens.css";
+@import "./base.css";
+@import "./components.css";
+@import "./sections.css";
+
+/* ==========================================================================
+   prefers-reduced-motion
+   La pagina se muestra completa y armada al instante. Sin intro, sin vuelo.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .field { display: none; }
+  .intro-logo, .intro-skip { display: none !important; }
+
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+
+  .btn:hover, .card:hover, .project:hover { transform: none; }
+}

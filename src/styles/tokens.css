@@ -1,0 +1,126 @@
+/* ==========================================================================
+   IAL — Design tokens
+   Committed dark theme. Un solo modo. Todo se define acá.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Rampa neutra: negro -> blanco -------------------------------- */
+  --n-000: #000000;
+  --n-050: #050507;
+  --n-100: #0a0a0e;
+  --n-150: #0e0e13;
+  --n-200: #121219;
+  --n-300: #1a1a22;
+  --n-400: #24242f;
+  --n-500: #33333f;
+  --n-600: #4c4c5a;
+  --n-700: #76768a;
+  --n-800: #a6a6b6;
+  --n-900: #d4d4de;
+  --n-950: #ededf2;
+  --n-1000: #ffffff;
+
+  /* ---- Acento: destello de luz estelar (usar con MUCHA moderacion) --- */
+  --accent: #a9dcff;
+  --accent-bright: #e2f3ff;
+  --accent-line: rgb(169 220 255 / 0.38);
+  --accent-soft: rgb(169 220 255 / 0.12);
+  --accent-glow: rgb(169 220 255 / 0.07);
+
+  /* ---- Superficies --------------------------------------------------- */
+  --bg: var(--n-050);
+  --bg-deep: var(--n-000);
+  --surface-1: rgb(255 255 255 / 0.022);
+  --surface-2: rgb(255 255 255 / 0.04);
+  --surface-3: rgb(255 255 255 / 0.065);
+
+  /* ---- Bordes -------------------------------------------------------- */
+  --border: rgb(255 255 255 / 0.07);
+  --border-mid: rgb(255 255 255 / 0.12);
+  --border-strong: rgb(255 255 255 / 0.2);
+
+  /* ---- Texto --------------------------------------------------------- */
+  --text-1: var(--n-950);
+  --text-2: var(--n-800);
+  --text-3: var(--n-700);
+  --text-4: var(--n-600);
+  --text-on-light: var(--n-050);
+
+  /* ---- Tipografia ---------------------------------------------------- */
+  --font-display: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Escala tipografica fluida (1.25 aprox., anclada a 16px) */
+  --fs-3xs: 0.6875rem;  /* 11 */
+  --fs-2xs: 0.75rem;    /* 12 */
+  --fs-xs:  0.8125rem;  /* 13 */
+  --fs-sm:  0.875rem;   /* 14 */
+  --fs-md:  clamp(0.9375rem, 0.91rem + 0.14vw, 1rem);
+  --fs-lg:  clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --fs-xl:  clamp(1.25rem, 1.14rem + 0.5vw, 1.5rem);
+  --fs-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --fs-3xl: clamp(2rem, 1.55rem + 2.1vw, 3.25rem);
+  --fs-4xl: clamp(2.5rem, 1.6rem + 4.1vw, 5.25rem);
+
+  --lh-tight: 1.02;
+  --lh-snug: 1.14;
+  --lh-head: 1.22;
+  --lh-body: 1.62;
+  --lh-loose: 1.75;
+
+  --tr-tight: -0.03em;
+  --tr-snug: -0.018em;
+  --tr-normal: 0em;
+  --tr-wide: 0.08em;
+  --tr-wider: 0.16em;
+
+  /* ---- Espaciado (base 4px) ------------------------------------------ */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 2.5rem;
+  --sp-8: 3rem;
+  --sp-9: 4rem;
+  --sp-10: 5rem;
+  --sp-11: 6.5rem;
+  --sp-12: 8rem;
+
+  --section-y: clamp(5rem, 3rem + 8vw, 9.5rem);
+  --gutter: clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
+  --measure: 62ch;
+  --maxw: 76rem;
+  --maxw-narrow: 54rem;
+
+  /* ---- Radios (contenidos, nada de rounded-lg en todo) --------------- */
+  --r-xs: 2px;
+  --r-sm: 3px;
+  --r-md: 5px;
+  --r-pill: 999px;
+
+  /* ---- Movimiento ----------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-travel: cubic-bezier(0.72, 0, 0.14, 1);
+  --dur-1: 120ms;
+  --dur-2: 220ms;
+  --dur-3: 420ms;
+  --dur-4: 700ms;
+
+  /* ---- Capas ---------------------------------------------------------- */
+  --z-field: 0;
+  --z-base: 1;
+  --z-header: 50;
+  --z-intro: 100;
+
+  --header-h: 68px;
+}
+
+@media (max-width: 640px) {
+  :root { --header-h: 58px; }
+}

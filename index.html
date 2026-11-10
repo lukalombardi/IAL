@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IAL — Sistemas a medida con criterio de ingeniería</title>
+<meta name="description" content="IAL construye software que entra en producción: sistemas de gestión a medida, automatización con n8n y WhatsApp, y bases de datos sobre PostgreSQL y Supabase. Integrado en una sola solución." />
+<meta name="theme-color" content="#050507" />
+<link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_AR" />
+<meta property="og:title" content="IAL — Sistemas a medida con criterio de ingeniería" />
+<meta property="og:description" content="Sistemas de gestión, automatización y bases de datos funcionando como una sola pieza. Software real, en producción." />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+/>
+
+<link rel="stylesheet" href="./src/styles/main.css" />
+
+<script>
+  /* La intro solo existe si hay JS y el usuario no pidió menos movimiento.
+     Failsafe: pase lo que pase, a los 6 s la página queda completa. */
+  (function () {
+    var root = document.documentElement;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) {
+      root.classList.add("is-intro");
+      setTimeout(function () { root.classList.remove("is-intro"); }, 6000);
+    }
+  })();
+</script>
+
+<script type="module" src="./src/js/main.js"></script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- Sprite SVG: el logo y los íconos, una sola vez --------------------- -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <!-- Trébol de 3 pétalos a 120°. Pétalo lenticular, punta interior y
+         exterior, radio exterior 100, hundimiento interior 36. -->
+    <symbol id="ial-mark" viewBox="-120 -120 240 240">
+      <g fill="currentColor">
+        <path d="M-68.2,-73.1 C-29.8,-108.9 29.8,-108.9 68.2,-73.1 C44,-23.6 -44,-23.6 -68.2,-73.1 Z" />
+        <path d="M-68.2,-73.1 C-29.8,-108.9 29.8,-108.9 68.2,-73.1 C44,-23.6 -44,-23.6 -68.2,-73.1 Z" transform="rotate(120)" />
+        <path d="M-68.2,-73.1 C-29.8,-108.9 29.8,-108.9 68.2,-73.1 C44,-23.6 -44,-23.6 -68.2,-73.1 Z" transform="rotate(240)" />
+      </g>
+    </symbol>
+
+    <symbol id="i-arrow" viewBox="0 0 16 16">
+      <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M3 8h10M9 4l4 4-4 4" />
+    </symbol>
+
+    <symbol id="i-node" viewBox="0 0 16 16">
+      <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M2.5 8h4l2-4 2 8 2-4h1" />
+    </symbol>
+  </defs>
+</svg>
+
+<!-- Campo de partículas (intro + ambiente) ------------------------------ -->
+<canvas class="field" id="field" aria-hidden="true"></canvas>
+
+<!-- Logo que se forma y viaja al header --------------------------------- -->
+<div class="intro-logo" id="introLogo" aria-hidden="true">
+  <svg viewBox="0 0 240 240"><use href="#ial-mark" /></svg>
+</div>
+<button class="intro-skip" id="introSkip" type="button">Saltar intro</button>
+
+<!-- Header --------------------------------------------------------------- -->
+<header class="header" id="header">
+  <div class="header__inner">
+    <a class="brand" href="#top" aria-label="IAL — inicio">
+      <svg class="mark" id="brandMark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+      <span>IAL</span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Secciones">
+      <a class="nav__link" href="#servicios">Servicios</a>
+      <a class="nav__link" href="#integracion">Integración</a>
+      <a class="nav__link" href="#proyectos">Proyectos</a>
+      <a class="nav__link" href="#equipo">Equipo</a>
+    </nav>
+
+    <a class="btn btn--ghost btn--sm" href="#contacto">
+      Contacto
+      <svg class="btn__arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
+    </a>
+  </div>
+</header>
+
+<main id="main">
+  <!-- =================== HERO =================== -->
+  <section class="hero" id="top">
+    <div class="shell hero__inner">
+      <p class="eyebrow" data-reveal>Ingeniería en Sistemas</p>
+
+      <h1 class="hero__title" data-reveal>
+        Sistemas a medida,<br />
+        con <em>criterio de ingeniería</em>.
+      </h1>
+
+      <p class="hero__sub" data-reveal>
+        Somos <strong>Ismael</strong>, <strong>Agustín</strong> y <strong>Luca</strong>.
+        Construimos software que entra en producción y se queda ahí: sistemas de gestión,
+        automatizaciones y bases de datos pensadas para durar.
+      </p>
+
+      <div class="hero__actions" data-reveal>
+        <a class="btn btn--primary" href="#proyectos">
+          Ver proyectos
+          <svg class="btn__arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
+        </a>
+        <a class="btn btn--ghost" href="#contacto">Contanos tu idea</a>
+      </div>
+
+      <div class="hero__stack" data-reveal>
+        <span class="hero__stack-label">Trabajamos con</span>
+        <ul class="hero__stack-list">
+          <li>Python</li>
+          <li>PostgreSQL</li>
+          <li>Supabase</li>
+          <li>n8n</li>
+          <li>Docker</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SERVICIOS =================== -->
+  <section class="section" id="servicios">
+    <div class="shell">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Qué hacemos</p>
+        <h2 class="section__title">Tres cosas, bien hechas.</h2>
+        <p class="section__lede">
+          No somos una agencia que hace de todo. Nos especializamos en lo que una empresa
+          necesita para dejar de trabajar con planillas sueltas.
+        </p>
+      </header>
+
+      <div class="services__grid">
+        <article class="card service" data-reveal>
+          <span class="service__index">01</span>
+          <h3 class="service__title">Sistemas a medida</h3>
+          <p class="service__body">
+            Software de gestión construido alrededor de cómo trabaja tu rubro, no al revés.
+            Ya lo hicimos para el agro y para una inmobiliaria: operaciones, clientes, stock
+            y reportes en un solo lugar.
+          </p>
+          <ul class="tag-row">
+            <li class="chip">Paneles de gestión</li>
+            <li class="chip">Reportes</li>
+            <li class="chip">Roles y permisos</li>
+          </ul>
+        </article>
+
+        <article class="card service" data-reveal>
+          <span class="service__index">02</span>
+          <h3 class="service__title">Automatización y chatbots</h3>
+          <p class="service__body">
+            Bots de WhatsApp y flujos en n8n que se ocupan de lo repetitivo: responder
+            consultas, cargar datos, avisar cuando algo pasa. Menos copiar y pegar, menos
+            cosas que dependen de que alguien se acuerde.
+          </p>
+          <ul class="tag-row">
+            <li class="chip">WhatsApp</li>
+            <li class="chip">n8n</li>
+            <li class="chip">Integraciones</li>
+          </ul>
+        </article>
+
+        <article class="card service" data-reveal>
+          <span class="service__index">03</span>
+          <h3 class="service__title">Bases de datos</h3>
+          <p class="service__body">
+            Modelado y esquemas sobre PostgreSQL y Supabase. Pensamos la estructura antes de
+            escribir la primera línea, y la seguridad desde el día uno: permisos por fila,
+            accesos acotados, backups.
+          </p>
+          <ul class="tag-row">
+            <li class="chip">Modelado</li>
+            <li class="chip">PostgreSQL</li>
+            <li class="chip">Seguridad</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== INTEGRACIÓN =================== -->
+  <section class="section integration" id="integracion">
+    <div class="shell">
+      <div class="integration__grid">
+        <div data-reveal>
+          <p class="eyebrow">El diferencial</p>
+          <h2 class="integration__title">
+            No entregamos tres herramientas. Entregamos <b>un sistema</b>.
+          </h2>
+          <p class="integration__body">
+            La mayoría resuelve una parte: te hacen el sistema, o el bot, o la base. Después
+            quedan tres cosas que no se hablan entre sí y alguien tiene que pasar los datos
+            a mano.
+          </p>
+          <p class="integration__body">
+            Nosotros diseñamos las tres como una sola pieza. El chatbot escribe en la misma
+            base que lee el panel. La automatización se dispara con el mismo evento que
+            registra la operación. Un solo producto: completo, a medida y moderno.
+          </p>
+
+          <ul class="integration__points">
+            <li>
+              <svg aria-hidden="true"><use href="#i-node" /></svg>
+              <span>Un solo lugar donde mirar lo que pasa en el negocio.</span>
+            </li>
+            <li>
+              <svg aria-hidden="true"><use href="#i-node" /></svg>
+              <span>Sin doble carga de datos ni planillas paralelas.</span>
+            </li>
+            <li>
+              <svg aria-hidden="true"><use href="#i-node" /></svg>
+              <span>Una sola arquitectura para mantener y hacer crecer.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="merge" data-reveal>
+          <div class="merge__col">
+            <div class="merge__node">Sistema de gestión</div>
+            <div class="merge__node">Automatización</div>
+            <div class="merge__node">Base de datos</div>
+          </div>
+
+          <svg class="merge__lines" viewBox="0 0 100 220" aria-hidden="true" preserveAspectRatio="none">
+            <path d="M0,34 C55,34 45,110 100,110" />
+            <path class="merge__pulse" d="M0,110 L100,110" />
+            <path d="M0,186 C55,186 45,110 100,110" />
+          </svg>
+
+          <div class="merge__result">
+            <svg class="mark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+            <p class="merge__result-title">Una sola solución</p>
+            <p class="merge__result-sub">Diseñada, construida y mantenida por el mismo equipo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== PROYECTOS =================== -->
+  <section class="section" id="proyectos">
+    <div class="shell">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Portfolio</p>
+        <h2 class="section__title">Trabajo en producción.</h2>
+        <p class="section__lede">
+          No son maquetas ni ejercicios de cursada. Son sistemas que hoy usa gente todos
+          los días para trabajar.
+        </p>
+      </header>
+
+      <div class="projects__list">
+        <article class="project" data-reveal>
+          <div class="project__meta">
+            <span class="project__index">01</span>
+            <span class="project__status">En producción</span>
+          </div>
+          <div>
+            <h3 class="project__title">Sistema de gestión para el agro</h3>
+            <p class="project__body">
+              La operación de campo ordenada en un solo lugar: seguimiento de lotes, insumos
+              y trabajos realizados, con reportes que se consultan todos los días en vez de
+              quedar archivados.
+            </p>
+          </div>
+          <ul class="project__stack">
+            <li class="chip">Python</li>
+            <li class="chip">PostgreSQL</li>
+            <li class="chip">Docker</li>
+          </ul>
+        </article>
+
+        <article class="project" data-reveal>
+          <div class="project__meta">
+            <span class="project__index">02</span>
+            <span class="project__status">En producción</span>
+          </div>
+          <div>
+            <h3 class="project__title">Sistema para una inmobiliaria</h3>
+            <p class="project__body">
+              Propiedades, consultas y seguimiento comercial en un mismo flujo. Cada contacto
+              queda registrado con su historial, así nada se pierde entre WhatsApp, el mail y
+              la planilla de siempre.
+            </p>
+          </div>
+          <ul class="project__stack">
+            <li class="chip">Supabase</li>
+            <li class="chip">PostgreSQL</li>
+            <li class="chip">Web app</li>
+          </ul>
+        </article>
+
+        <article class="project" data-reveal>
+          <div class="project__meta">
+            <span class="project__index">03</span>
+            <span class="project__status">En producción</span>
+          </div>
+          <div>
+            <h3 class="project__title">Chatbot de WhatsApp para reventa de productos Apple</h3>
+            <p class="project__body">
+              WhatsApp entra a n8n, n8n consulta Supabase y responde. El bot atiende catálogo,
+              consultas y precios actualizados sin que nadie tenga que estar del otro lado, y
+              deja registrado todo lo que se preguntó.
+            </p>
+          </div>
+          <ul class="project__stack">
+            <li class="chip">n8n</li>
+            <li class="chip">Supabase</li>
+            <li class="chip">WhatsApp</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== EQUIPO =================== -->
+  <section class="section" id="equipo">
+    <div class="shell">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Quiénes somos</p>
+        <h2 class="section__title">Tres personas, un mismo criterio.</h2>
+        <p class="section__lede">
+          Analistas en Sistemas recibidos, estudiando Ingeniería en Sistemas. El nombre sale
+          de nuestras iniciales.
+        </p>
+      </header>
+
+      <div class="team__grid">
+        <!-- EDITABLE: cambiá la bio de cada uno por la real -->
+        <article class="card" data-reveal>
+          <div class="member__mark">
+            <svg class="mark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+            <span class="member__letter">I</span>
+          </div>
+          <h3 class="member__name">Ismael</h3>
+          <p class="member__role">Analista en Sistemas<br />Estudiante de Ingeniería en Sistemas</p>
+          <p class="member__bio">
+            Backend y datos. Se ocupa de que el modelo aguante lo que el negocio le pida y de
+            que las consultas sigan siendo rápidas cuando la tabla crece.
+          </p>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="member__mark">
+            <svg class="mark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+            <span class="member__letter">A</span>
+          </div>
+          <h3 class="member__name">Agustín</h3>
+          <p class="member__role">Analista en Sistemas<br />Estudiante de Ingeniería en Sistemas</p>
+          <p class="member__bio">
+            Automatización e integraciones. Arma los flujos que conectan el chatbot, el
+            sistema y la base, y los deja corriendo sin supervisión.
+          </p>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="member__mark">
+            <svg class="mark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+            <span class="member__letter">L</span>
+          </div>
+          <h3 class="member__name">Luca</h3>
+          <p class="member__role">Analista en Sistemas<br />Estudiante de Ingeniería en Sistemas</p>
+          <p class="member__bio">
+            Producto e interfaz. Traduce la operación real del cliente en pantallas que se
+            entienden sin manual ni capacitación.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CONTACTO =================== -->
+  <section class="section" id="contacto">
+    <div class="shell">
+      <div class="contact__grid">
+        <div data-reveal>
+          <p class="eyebrow">Hablemos</p>
+          <h2 class="contact__title">Contanos qué necesitás resolver.</h2>
+          <p class="contact__lede">
+            Escribinos con el problema, no con la solución. De pensar cómo se resuelve nos
+            encargamos nosotros.
+          </p>
+
+          <div class="mailbox">
+            <div>
+              <span class="mailbox__label">Correo</span>
+              <!-- EDITABLE: cambiá este correo por el real (también en el form) -->
+              <span class="mailbox__value" id="contactEmail">hola@ial.dev</span>
+            </div>
+            <button class="btn btn--ghost btn--sm" type="button" id="copyEmail" data-copy-target="contactEmail">
+              Copiar
+            </button>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <form class="form" id="contactForm" novalidate>
+            <div class="field-group">
+              <label for="f-nombre">Nombre</label>
+              <input class="input" id="f-nombre" name="nombre" type="text" autocomplete="name"
+                     placeholder="Cómo te llamás" required />
+              <p class="field-error" id="e-nombre" aria-live="polite"></p>
+            </div>
+
+            <div class="field-group">
+              <label for="f-correo">Correo</label>
+              <input class="input" id="f-correo" name="correo" type="email" autocomplete="email"
+                     inputmode="email" placeholder="donde podemos responderte" required />
+              <p class="field-error" id="e-correo" aria-live="polite"></p>
+            </div>
+
+            <div class="field-group">
+              <label for="f-mensaje">Mensaje</label>
+              <textarea class="input" id="f-mensaje" name="mensaje" rows="5"
+                        placeholder="Qué hace tu negocio y qué te está costando resolver hoy" required></textarea>
+              <p class="field-error" id="e-mensaje" aria-live="polite"></p>
+            </div>
+
+            <div class="form__actions">
+              <button class="btn btn--primary" type="submit" id="formSubmit">
+                <span id="formSubmitLabel">Preparar mensaje</span>
+                <svg class="btn__arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
+              </button>
+              <p class="status-msg" id="formStatus" role="status" aria-live="polite"></p>
+            </div>
+
+            <p class="form__note" id="formNote">
+              Este formulario no envía nada solo. Al tocar el botón armamos el mensaje y vos
+              decidís: copiarlo o abrirlo en tu correo.
+            </p>
+          </form>
+
+          <div class="compose" id="compose" hidden>
+            <p class="compose__title">Tu mensaje, listo</p>
+            <textarea class="compose__text" id="composeText" readonly
+                      aria-label="Mensaje preparado para enviar"></textarea>
+            <div class="compose__actions">
+              <a class="btn btn--primary btn--sm" id="composeMail" href="#">Abrir en mi correo</a>
+              <button class="btn btn--ghost btn--sm" type="button" id="composeCopy"
+                      data-copy-target="composeText">Copiar texto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="shell footer__inner">
+    <a class="brand" href="#top" aria-label="IAL — inicio">
+      <svg class="mark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+      <span>IAL</span>
+    </a>
+    <div class="footer__meta">
+      <span>Ismael · Agustín · Luca</span>
+      <span>Argentina</span>
+      <span>&copy; <span id="year">2026</span></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

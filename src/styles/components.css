@@ -1,0 +1,283 @@
+/* ==========================================================================
+   Componentes
+   ========================================================================== */
+
+/* ---- Marca ------------------------------------------------------------ */
+
+.mark { width: 1em; height: 1em; color: var(--n-1000); flex: none; }
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 112%;
+  font-size: var(--fs-lg);
+  letter-spacing: 0.02em;
+  color: var(--text-1);
+}
+.brand .mark { font-size: 1.5rem; }
+
+/* ---- Botones ---------------------------------------------------------- */
+
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--text-1);
+  --btn-bd: var(--border-mid);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.35rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-bd);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn--primary {
+  --btn-bg: var(--n-1000);
+  --btn-fg: var(--text-on-light);
+  --btn-bd: var(--n-1000);
+  font-weight: 600;
+}
+.btn--primary:hover { --btn-bg: var(--accent-bright); --btn-bd: var(--accent-bright); }
+
+.btn--ghost { --btn-bg: var(--surface-1); }
+.btn--ghost:hover { --btn-bg: var(--surface-3); --btn-bd: var(--border-strong); }
+
+.btn--sm { padding: 0.55rem 0.9rem; font-size: var(--fs-xs); }
+
+.btn__arrow {
+  width: 0.75em;
+  height: 0.75em;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.btn:hover .btn__arrow { transform: translateX(3px); }
+
+/* ---- Link con subrayado que barre ------------------------------------- */
+
+.link {
+  position: relative;
+  color: var(--text-1);
+  font-weight: 500;
+  padding-bottom: 1px;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* ---- Chips / tags ------------------------------------------------------ */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* ---- Card con glow que sigue al puntero -------------------------------- */
+
+.card {
+  --glow-x: 50%;
+  --glow-y: 0%;
+  position: relative;
+  isolation: isolate;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: clamp(1.5rem, 1.1rem + 1.3vw, 2.25rem);
+  transition:
+    border-color var(--dur-3) var(--ease-out),
+    background-color var(--dur-3) var(--ease-out),
+    transform var(--dur-3) var(--ease-out);
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    20rem 20rem at var(--glow-x) var(--glow-y),
+    var(--accent-glow),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.card::after {
+  content: "";
+  position: absolute;
+  top: -1px; left: 1.5rem; right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-line), transparent);
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.card:hover {
+  border-color: var(--border-mid);
+  background: var(--surface-2);
+  transform: translateY(-2px);
+}
+.card:hover::before, .card:hover::after { opacity: 1; }
+
+/* ---- Header ------------------------------------------------------------ */
+
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--dur-3) var(--ease-out),
+    border-color var(--dur-3) var(--ease-out);
+}
+.header.is-stuck {
+  background: rgb(5 5 7 / 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom-color: var(--border);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* El logo del header es el destino del vuelo de particulas.
+   Aparece recien cuando el logo volador aterriza (fin de .is-landing). */
+#brandMark { opacity: 1; transition: opacity 220ms linear; }
+html.is-intro #brandMark,
+html.is-landing #brandMark { opacity: 0; }
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 0.4rem + 1.6vw, 2rem);
+}
+.nav__link {
+  position: relative;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  transition: color var(--dur-2) var(--ease-out);
+}
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.nav__link:hover { color: var(--text-1); }
+.nav__link[aria-current="true"] { color: var(--text-1); }
+.nav__link[aria-current="true"]::after { transform: scaleX(1); }
+
+@media (max-width: 860px) {
+  .nav { display: none; }
+}
+
+/* ---- Intro (canvas + logo volador) ------------------------------------- */
+
+.field {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-field);
+  pointer-events: none;
+}
+html.is-intro .field { z-index: var(--z-intro); }
+
+.intro-logo {
+  --intro-size: clamp(130px, 30vmin, 230px);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: calc(var(--z-intro) + 1);
+  width: var(--intro-size);
+  height: var(--intro-size);
+  margin: calc(var(--intro-size) / -2) 0 0 calc(var(--intro-size) / -2);
+  color: var(--n-1000);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.intro-logo svg { width: 100%; height: 100%; }
+/* Sigue en pantalla durante el vuelo (.is-landing), despues desaparece. */
+html:not(.is-intro):not(.is-landing) .intro-logo { display: none; }
+
+.intro-skip {
+  position: fixed;
+  bottom: var(--sp-6);
+  left: 50%;
+  translate: -50% 0;
+  z-index: calc(var(--z-intro) + 2);
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: rgb(5 5 7 / 0.5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  color: var(--text-4);
+  transition: color var(--dur-2), border-color var(--dur-2);
+}
+.intro-skip:hover { color: var(--text-2); border-color: var(--border-mid); }
+html:not(.is-intro) .intro-skip { display: none; }
+
+/* ---- Revelado escalonado post-intro ------------------------------------ */
+/* Regla clave: el estado final SIEMPRE es visible. Solo durante la intro
+   (clase puesta por JS, con failsafe de 6s) algo esta oculto.             */
+
+[data-reveal] {
+  transition:
+    opacity var(--dur-4) var(--ease-out),
+    transform var(--dur-4) var(--ease-out);
+}
+html.is-intro [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+}
