@@ -19,6 +19,7 @@
   --n-600: #4c4c5a;
   --n-650: #5f5f6f;
   --n-700: #76768a;
+  --n-750: #9292a4;
   --n-800: #a6a6b6;
   --n-900: #d4d4de;
   --n-950: #ededf2;
@@ -31,17 +32,25 @@
   --accent-soft: rgb(169 220 255 / 0.12);
   --accent-glow: rgb(169 220 255 / 0.07);
 
-  /* Velos de la atmosfera espacial del fondo (body::before) */
-  --veil-1: rgb(255 255 255 / 0.028);
-  --veil-2: rgb(255 255 255 / 0.022);
+  /* ---- Atmosfera del fondo -------------------------------------------
+     Las perillas para dosificar cuanto "aire" tiene el negro. Subir estos
+     valores aclara y da cuerpo; bajarlos vuelve al vacio.
+     ------------------------------------------------------------------- */
+  --veil-1: rgb(255 255 255 / 0.055);   /* foco superior derecho */
+  --veil-2: rgb(255 255 255 / 0.042);   /* foco inferior izquierdo */
+  --veil-3: rgb(255 255 255 / 0.03);    /* foco que acompaña el scroll */
+  --vignette: rgb(0 0 0 / 0.55);        /* oscurece bordes: centra la vista */
+  --grain-opacity: 0.055;               /* textura: lo que saca el "plano" */
 
   /* ---- Error: el unico color calido, solo para validacion ------------ */
   --danger: #ffa7a7;
   --danger-line: rgb(255 167 167 / 0.55);
 
   /* ---- Superficies --------------------------------------------------- */
-  --bg: var(--n-050);
+  --bg: #07070b;
   --bg-deep: var(--n-000);
+  /* Lift casi imperceptible para alternar secciones y dar ritmo al scroll */
+  --surface-0: rgb(255 255 255 / 0.016);
   --surface-1: rgb(255 255 255 / 0.022);
   --surface-2: rgb(255 255 255 / 0.04);
   --surface-3: rgb(255 255 255 / 0.065);
@@ -52,15 +61,27 @@
   --border-strong: rgb(255 255 255 / 0.2);
 
   /* ---- Texto ---------------------------------------------------------
-     Contraste medido sobre --bg (#050507):
-       text-1  17.9:1   text-2  9.9:1
-       text-3   4.6:1 — minimo AA para texto normal
-       text-4   3.3:1 — SOLO adornos y placeholders, nunca contenido
+     Al aclarar el fondo, text-3 y text-4 suben un escalon: mantienen el
+     contraste y de paso el texto secundario deja de desaparecer, que era
+     parte de la sensacion de vacio.
+
+     Ratios medidos componiendo TODAS las capas del fondo (color base +
+     velo + grano + lift de seccion), no solo contra --bg:
+
+                  fondo plano   peor caso (velo + lift + grano)
+       text-1        16.6:1              13.1:1
+       text-2         8.1:1               6.4:1
+       text-3         6.3:1               5.0:1   <- margen sobre AA (4.5)
+       text-4         4.4:1               3.4:1   <- SOLO adornos y
+                                                     placeholders, nunca
+                                                     contenido
+     Si subis --grain-opacity o los velos, volve a medir: el peor caso es
+     el que manda.
      ------------------------------------------------------------------- */
   --text-1: var(--n-950);
   --text-2: var(--n-800);
-  --text-3: var(--n-700);
-  --text-4: var(--n-650);
+  --text-3: var(--n-750);
+  --text-4: var(--n-700);
   --text-on-light: var(--n-050);
 
   /* ---- Tipografia ---------------------------------------------------- */

@@ -205,7 +205,7 @@ export class ParticleField {
     for (const p of this.particles) p.startAlpha = p.alpha;
   }
 
-  /** Vida 2: fondo. Pocas partículas, muy tenues, deriva lenta. */
+  /** Vida 2: fondo. Deriva lenta, en tres planos de profundidad. */
   toAmbient() {
     this.seedAmbient();
     this.mode = MODE.AMBIENT;
@@ -213,23 +213,37 @@ export class ParticleField {
     this.start();
   }
 
+  /**
+   * Tres planos: lejano (chico, tenue, lento), medio y cercano (mas grande,
+   * mas brillante, mas rapido). La diferencia de velocidad y tamaño entre
+   * planos es lo que hace que el fondo se lea como espacio con profundidad
+   * y no como un puñado de puntos sueltos sobre negro.
+   *
+   * Siguen siendo fillRect sin sombras: a 230 particulas no se nota en el
+   * frame budget, y se pausa solo cuando la pestaña queda oculta.
+   */
   seedAmbient() {
-    const n = this.isSmall ? 55 : 110;
+    const n = this.isSmall ? 110 : 230;
     const list = new Array(n);
+
     for (let i = 0; i < n; i += 1) {
+      const depth = Math.random();          // 0 = lejos, 1 = cerca
+      const near = depth > 0.82;
+
       list[i] = {
         x: Math.random() * this.w,
         y: Math.random() * this.h,
-        vx: rand(-0.0075, 0.0075),
-        vy: rand(-0.014, -0.002),
-        size: Math.random() < 0.12 ? rand(1.4, 2.1) : rand(0.6, 1.2),
+        vx: rand(-0.006, 0.006) * (0.4 + depth),
+        vy: rand(-0.016, -0.003) * (0.4 + depth),
+        size: near ? rand(1.5, 2.4) : rand(0.6, 1.1) + depth * 0.5,
         alpha: 0,
-        maxAlpha: rand(0.1, 0.42),
+        maxAlpha: 0.12 + depth * 0.46,
         twinkle: Math.random() * Math.PI * 2,
-        twinkleSpeed: rand(0.0005, 0.0017),
-        bright: Math.random() < 0.1,
+        twinkleSpeed: rand(0.0004, 0.0016),
+        bright: near && Math.random() < 0.45,
       };
     }
+
     this.particles = list;
   }
 

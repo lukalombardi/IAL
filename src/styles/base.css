@@ -27,17 +27,44 @@ body {
   min-height: 100vh;
 }
 
-/* Atmosfera espacial: muy sutil, dos focos frios y una vineta */
-body::before {
+/* --------------------------------------------------------------------------
+   Atmosfera espacial. Dos capas fijas detras de todo:
+
+   ::before  focos de luz + vineta. Da volumen al negro y centra la vista.
+   ::after   grano. Es lo que evita que el fondo se lea como un plano vacio;
+             sin textura, un negro tan parejo no parece materia, parece hueco.
+
+   Las dos son position:fixed y pointer-events:none, asi que no entran en el
+   layout ni interceptan clicks. Se dosifican desde tokens.css.
+   -------------------------------------------------------------------------- */
+
+body::before,
+body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: -1;
   pointer-events: none;
+}
+
+body::before {
+  z-index: -2;
   background:
-    radial-gradient(60rem 42rem at 50% -8%, var(--accent-glow), transparent 62%),
-    radial-gradient(44rem 30rem at 92% 24%, var(--veil-1), transparent 60%),
-    radial-gradient(52rem 38rem at 4% 76%, var(--veil-2), transparent 60%);
+    /* destello frio detras del hero */
+    radial-gradient(58rem 40rem at 50% -6%, var(--accent-glow), transparent 64%),
+    /* dos focos que dan volumen */
+    radial-gradient(46rem 34rem at 88% 18%, var(--veil-1), transparent 62%),
+    radial-gradient(54rem 40rem at 6% 72%, var(--veil-2), transparent 62%),
+    /* vineta: bordes mas oscuros que el centro */
+    radial-gradient(130% 105% at 50% 45%, transparent 48%, var(--vignette) 100%);
+}
+
+/* Grano monocromo generado con feTurbulence: un solo data URI, sin pedidos
+   de red y sin imagen que mantener. Se repite en mosaico de 160px. */
+body::after {
+  z-index: -1;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
 img, svg, canvas { display: block; max-width: 100%; }
@@ -125,6 +152,23 @@ p { text-wrap: pretty; }
 .section { padding-block: var(--section-y); position: relative; }
 
 .section + .section { border-top: 1px solid var(--border); }
+
+/* Ritmo tonal: secciones alternadas se levantan un pelo y traen su propio
+   foco de luz. La atmosfera del body es fija, asi que sin esto el scroll
+   atraviesa miles de pixeles de un tono identico y se siente vacio.
+   El lift es casi imperceptible por si solo; lo que se nota es el cambio. */
+.section--lift {
+  --lift-x: 78%;
+  background-color: var(--surface-0);
+  background-image: radial-gradient(
+    70rem 34rem at var(--lift-x) 50%,
+    var(--veil-3),
+    transparent 68%
+  );
+}
+
+/* El foco cambia de lado entre una seccion levantada y la siguiente. */
+.section--lift-alt { --lift-x: 22%; }
 
 .section__head { margin-bottom: clamp(2.5rem, 1.6rem + 3.2vw, 4.5rem); }
 
