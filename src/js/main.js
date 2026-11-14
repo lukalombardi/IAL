@@ -5,6 +5,7 @@
 import { initNav } from "./nav.js";
 import { initContact } from "./contact.js";
 import { initPointerGlow } from "./pointer.js";
+import { initGravity, initInView } from "./gravity.js";
 
 const root = document.documentElement;
 
@@ -16,6 +17,7 @@ if (year) year.textContent = String(new Date().getFullYear());
 initNav();
 initContact();
 initPointerGlow();
+initInView();
 
 /* ---- intro ------------------------------------------------------------- */
 /* El script del <head> puso .is-intro solo si no hay prefers-reduced-motion.
@@ -30,7 +32,9 @@ if (root.classList.contains("is-intro")) {
   if (canvas && introLogo && brandMark) {
     import("./intro.js")
       .then(({ runIntro }) => {
-        runIntro({ canvas, introLogo, skipButton, brandMark });
+        // El campo sobrevive a la intro como fondo; la gravedad lo usa.
+        const field = runIntro({ canvas, introLogo, skipButton, brandMark });
+        initGravity(field);
       })
       .catch(() => {
         // Si la intro no carga, la página igual queda completa y legible.

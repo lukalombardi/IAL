@@ -5,6 +5,11 @@
  *   1. INTRO   scatter -> converge (forman el logo) -> dissolve
  *   2. AMBIENTE  deriva lenta de fondo, barata, pausada en pestaña oculta
  *
+ * En modo ambiente el campo tiene gravedad: los atractores (puntero, botones,
+ * el logo del diagrama) curvan la deriva de lo que pasa cerca, lo acumulan y
+ * lo encienden. Es la misma idea de la intro —materia dispersa que converge—
+ * puesta en manos del que navega. Ver gravity.js para quién los pone.
+ *
  * Un solo canvas, un solo rAF. Sin dependencias.
  */
 
@@ -22,6 +27,28 @@ const easeInOutQuart = (t) =>
 
 const rand = (min, max) => min + Math.random() * (max - min);
 
+/**
+ * Sprite de resplandor: un degradado radial frío pintado UNA vez en un canvas
+ * chico. Las partículas calientes lo estampan con drawImage, que es mucho más
+ * barato que un gradiente por partícula y no se ve como un cuadrado.
+ */
+function makeGlowSprite() {
+  const size = 64;
+  const c = document.createElement("canvas");
+  c.width = size;
+  c.height = size;
+  const ctx = c.getContext("2d");
+  if (!ctx) return null;
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, "rgba(226, 243, 255, 0.9)");
+  g.addColorStop(0.22, "rgba(169, 220, 255, 0.45)");
+  g.addColorStop(0.55, "rgba(169, 220, 255, 0.1)");
+  g.addColorStop(1, "rgba(169, 220, 255, 0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  return c;
+}
+
 export class ParticleField {
   /** @param {HTMLCanvasElement} canvas */
   constructor(canvas) {
@@ -38,6 +65,12 @@ export class ParticleField {
     this.dpr = 1;
     this.w = 0;
     this.h = 0;
+
+    /* Gravedad (solo en AMBIENT). id -> { x, y, r, k, glow } en px de viewport. */
+    this.attractors = new Map();
+    /* Desplazamiento de scroll todavía no aplicado: se consume con inercia. */
+    this.scrollDebt = 0;
+    this.glow = makeGlowSprite();
 
     this.onResize = this.onResize.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -219,11 +252,11 @@ export class ParticleField {
    * planos es lo que hace que el fondo se lea como espacio con profundidad
    * y no como un puñado de puntos sueltos sobre negro.
    *
-   * Siguen siendo fillRect sin sombras: a 230 particulas no se nota en el
+   * Siguen siendo fillRect sin sombras: a 320 particulas no se nota en el
    * frame budget, y se pausa solo cuando la pestaña queda oculta.
    */
   seedAmbient() {
-    const n = this.isSmall ? 110 : 230;
+    const n = this.isSmall ? 140 : 320;
     const list = new Array(n);
 
     for (let i = 0; i < n; i += 1) {
@@ -233,8 +266,14 @@ export class ParticleField {
       list[i] = {
         x: Math.random() * this.w,
         y: Math.random() * this.h,
+        depth,
         vx: rand(-0.006, 0.006) * (0.4 + depth),
         vy: rand(-0.016, -0.003) * (0.4 + depth),
+        // Velocidad "prestada" por los atractores. Se amortigua sola, así que
+        // cuando la gravedad se va, la partícula vuelve a su deriva.
+        ex: 0,
+        ey: 0,
+        heat: 0,
         size: near ? rand(1.5, 2.4) : rand(0.6, 1.1) + depth * 0.5,
         alpha: 0,
         maxAlpha: 0.12 + depth * 0.46,
@@ -245,6 +284,43 @@ export class ParticleField {
     }
 
     this.particles = list;
+  }
+
+  /* ------------------------------------------------------------ gravedad */
+
+  /**
+   * Pone (o mueve) un atractor. Solo actúa en modo ambiente.
+   * @param {string} id
+   * @param {{x:number,y:number,r?:number,k?:number,glow?:number}} a
+   *   x,y en px de viewport · r radio de influencia · k intensidad
+   *   (px/ms²: ~0.0003 débil, ~0.0007 fuerte) · glow 0..1 cuánto enciende.
+   */
+  setAttractor(id, a) {
+    const prev = this.attractors.get(id);
+    if (prev) {
+      prev.x = a.x;
+      prev.y = a.y;
+      if (a.r != null) prev.r = a.r;
+      if (a.k != null) prev.k = a.k;
+      if (a.glow != null) prev.glow = a.glow;
+      return;
+    }
+    this.attractors.set(id, {
+      x: a.x,
+      y: a.y,
+      r: a.r == null ? 180 : a.r,
+      k: a.k == null ? 0.0003 : a.k,
+      glow: a.glow == null ? 1 : a.glow,
+    });
+  }
+
+  removeAttractor(id) {
+    this.attractors.delete(id);
+  }
+
+  /** Avisa cuánto se scrolleó: el campo lo acompaña con inercia. */
+  nudgeScroll(deltaY) {
+    this.scrollDebt += deltaY;
   }
 
   /* -------------------------------------------------------------- update */
@@ -293,15 +369,64 @@ export class ParticleField {
 
       case MODE.AMBIENT: {
         const fadeIn = Math.min(1, elapsed / 900);
+        const atts = this.attractors.size ? Array.from(this.attractors.values()) : null;
+        // Inercia de scroll: el campo acompaña el scroll con retraso y se
+        // asienta. Cada frame consume una fracción de lo que falta aplicar.
+        const shift = this.scrollDebt * (1 - Math.exp(-dt / 140));
+        this.scrollDebt -= shift;
+        // Amortiguación de la velocidad prestada (tau ~ 650 ms).
+        const damp = Math.exp(-dt / 650);
+        const h = this.h;
+        const w = this.w;
+
         for (const p of this.particles) {
-          p.x += p.vx * dt;
-          p.y += p.vy * dt;
+          let heat = 0;
+
+          if (atts) {
+            for (let i = 0; i < atts.length; i += 1) {
+              const a = atts[i];
+              const dx = a.x - p.x;
+              const dy = a.y - p.y;
+              const d2 = dx * dx + dy * dy;
+              if (d2 >= a.r * a.r) continue;
+              const d = Math.sqrt(d2) || 1;
+              const t = 1 - d / a.r;            // 0 en el borde, 1 en el centro
+              let f = a.k * t * t;
+              // Núcleo blando: cerca del centro la fuerza cae, así la materia
+              // se acumula en una nube alrededor y no se clava en un punto.
+              const core = a.r * 0.22;
+              if (d < core) f *= d / core;
+              const ux = dx / d;
+              const uy = dy / d;
+              // Atracción radial + un poco de órbita: entra en espiral.
+              p.ex += (ux - uy * 0.45) * f * dt;
+              p.ey += (uy + ux * 0.45) * f * dt;
+              if (t * a.glow > heat) heat = t * a.glow;
+            }
+          }
+
+          p.ex *= damp;
+          p.ey *= damp;
+          // Tope de velocidad: nada cruza la pantalla de un tirón.
+          const sp = p.ex * p.ex + p.ey * p.ey;
+          if (sp > 0.0324) {
+            const s = 0.18 / Math.sqrt(sp);
+            p.ex *= s;
+            p.ey *= s;
+          }
+
+          p.x += (p.vx + p.ex) * dt;
+          p.y += (p.vy + p.ey) * dt - shift * (0.04 + p.depth * 0.16);
           p.twinkle += p.twinkleSpeed * dt;
-          if (p.y < -8) { p.y = this.h + 8; p.x = Math.random() * this.w; }
-          if (p.x < -8) p.x = this.w + 8;
-          else if (p.x > this.w + 8) p.x = -8;
+
+          if (p.y < -8) { p.y = h + 8; p.x = Math.random() * w; }
+          else if (p.y > h + 8) { p.y = -8; p.x = Math.random() * w; }
+          if (p.x < -8) p.x = w + 8;
+          else if (p.x > w + 8) p.x = -8;
+
           const pulse = 0.65 + 0.35 * Math.sin(p.twinkle);
-          p.alpha = p.maxAlpha * pulse * fadeIn;
+          p.heat = heat;
+          p.alpha = Math.min(1, p.maxAlpha * pulse + heat * 0.7) * fadeIn;
         }
         break;
       }
@@ -317,11 +442,20 @@ export class ParticleField {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.w, this.h);
 
+    const glow = this.glow;
+
     for (const p of this.particles) {
       if (p.alpha <= 0.004) continue;
+      const heat = p.heat || 0;
 
-      if (p.bright) {
-        // Halo barato: un rect más grande a alfa muy baja. Nada de shadowBlur.
+      if (heat > 0.08 && glow) {
+        // Cerca de un atractor la partícula se enciende: resplandor frío que
+        // crece con el calor. Un drawImage del sprite, nada de shadowBlur.
+        ctx.globalAlpha = Math.min(1, p.alpha * (0.3 + heat * 0.7));
+        const g = p.size * (7 + heat * 9);
+        ctx.drawImage(glow, p.x - g / 2, p.y - g / 2, g, g);
+      } else if (p.bright) {
+        // Halo barato: un rect más grande a alfa muy baja.
         ctx.globalAlpha = p.alpha * 0.1;
         ctx.fillStyle = "#a9dcff";
         const g = p.size * 4;
@@ -329,7 +463,7 @@ export class ParticleField {
       }
 
       ctx.globalAlpha = p.alpha;
-      ctx.fillStyle = p.bright ? "#e2f3ff" : "#ffffff";
+      ctx.fillStyle = heat > 0.08 || p.bright ? "#e2f3ff" : "#ffffff";
       ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
     }
 

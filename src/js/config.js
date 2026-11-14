@@ -6,6 +6,8 @@
 /** Correo visible y destino del mailto. */
 export const CONTACT_EMAIL = "hola@ial.dev";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 /**
  * Endpoint real del formulario (Formspree, Netlify Forms, tu propia API).
  * Vacío = el formulario NO envía: arma el mensaje y te lo deja listo para
@@ -13,4 +15,4 @@ export const CONTACT_EMAIL = "hola@ial.dev";
  *
  * Ejemplo: "https://formspree.io/f/xxxxxxxx"
  */
-export const FORM_ENDPOINT = "";
+export const FORM_ENDPOINT = `${API_BASE}/inquiries`;

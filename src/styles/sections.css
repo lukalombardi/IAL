@@ -27,8 +27,13 @@
   line-height: var(--lh-tight);
   letter-spacing: var(--tr-tight);
   color: var(--text-1);
-  max-width: 17ch;
+  max-width: 22ch;
 }
+
+/* Salto de linea del titulo: solo en ancho, donde cada mitad entra en una
+   linea. En angosto el balanceo del navegador corta mejor que un <br>. */
+.br-wide { display: none; }
+@media (min-width: 760px) { .br-wide { display: inline; } }
 
 .hero__sub {
   margin-top: var(--sp-6);
@@ -97,11 +102,14 @@
 
 /* ---- INTEGRACION (seccion destacada) ----------------------------------- */
 
+/* Fondo translucido a proposito: el campo de particulas tiene que verse a
+   traves de esta seccion, porque aca la materia converge hacia el logo del
+   diagrama. Un color opaco lo taparia. */
 .integration {
   position: relative;
   background:
     radial-gradient(70rem 36rem at 50% 0%, var(--accent-glow), transparent 68%),
-    linear-gradient(180deg, var(--n-100), var(--bg) 70%);
+    linear-gradient(180deg, var(--surface-1), transparent 70%);
 }
 .integration::before {
   content: "";
@@ -177,6 +185,17 @@
 .merge__lines { width: 100%; height: auto; color: var(--border-mid); }
 .merge__lines path { fill: none; stroke: currentColor; stroke-width: 1; }
 .merge__lines .merge__pulse { stroke: var(--accent); stroke-width: 1.25; }
+
+/* Las lineas se trazan una sola vez, cuando el diagrama entra en pantalla:
+   tres entradas que se juntan en una. pathLength="1" en el SVG hace que el
+   mismo dasharray sirva para la recta y las curvas. */
+.merge__lines path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--dur-reveal) var(--ease-out);
+}
+.merge__lines .merge__pulse { transition-delay: var(--dur-3); }
+.merge.is-inview .merge__lines path { stroke-dashoffset: 0; }
 
 .merge__result {
   padding: clamp(1rem, 0.75rem + 1vw, 1.75rem);

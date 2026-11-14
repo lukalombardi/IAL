@@ -130,7 +130,8 @@ src/
   js/
     config.js           correo de contacto y endpoint del formulario
     logo.js             geometría del logo + muestreo de píxeles (getImageData)
-    particles.js        campo de partículas (intro + ambiente)
+    particles.js        campo de partículas (intro + ambiente + gravedad)
+    gravity.js          quién atrae partículas: puntero, botones, logo del diagrama
     intro.js            línea de tiempo de la animación de entrada
     nav.js              header pegajoso + sección activa
     contact.js          formulario y botones de copiar
@@ -198,6 +199,23 @@ repetido a 0° / 120° / 240°.
 > Ojo con los `viewBox` anidados: los `<svg>` que hacen `<use href="#ial-mark">` usan
 > `viewBox="0 0 240 240"`, y el `<symbol>` es el que lleva el sistema centrado `-120 -120 240 240`.
 > Si le ponés el viewBox centrado a los dos, el logo se dibuja corrido.
+
+### La idea que sostiene el sitio
+
+**"De la materia dispersa emerge el sistema."** Física (partículas, gravedad,
+convergencia) que se ordena en sistema (grilla, esquema, precisión). La intro lo
+cuenta una vez; el resto de la página lo repite en chico:
+
+- El fondo tiene **gravedad**. El puntero curva la deriva de lo que pasa cerca.
+  Los botones principales (`data-attract`) y el logo del diagrama de integración
+  (`data-attract-view`) atraen la materia, que se acumula alrededor y se enciende.
+  Con teclado pasa lo mismo al enfocar; en touch, un pulso corto al tocar.
+- Al scrollear, el campo acompaña con inercia y se asienta (más cerca, más rápido).
+- Las líneas del diagrama "tres piezas → una" se trazan cuando entra en pantalla.
+
+Perillas en `src/js/gravity.js` (`POINTER`, `CTA`, `VIEW`: radio `r`, fuerza `k`,
+brillo `glow`). Para que algo nuevo atraiga, alcanza con ponerle `data-attract`.
+Con `prefers-reduced-motion` nada de esto corre: no hay campo.
 
 ### Tiempos de la animación — `src/js/intro.js`
 

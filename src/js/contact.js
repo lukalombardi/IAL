@@ -202,7 +202,7 @@ function initForm() {
         const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ ...values, _subject: subject }),
+          body: JSON.stringify({ name: values.nombre, email: values.correo, message: values.mensaje }),
         });
         if (!res.ok) throw new Error("HTTP " + res.status);
         setStatus("Mensaje enviado. Te respondemos a la brevedad.");
