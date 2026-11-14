@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>IAL — Sistemas a medida con criterio de ingeniería</title>
-<meta name="description" content="IAL construye software que entra en producción: sistemas de gestión a medida, automatización con n8n y WhatsApp, y bases de datos sobre PostgreSQL y Supabase. Integrado en una sola solución." />
+<meta name="description" content="De la materia dispersa emerge el sistema. IAL construye software que entra en producción: sistemas de gestión a medida, automatización con n8n y WhatsApp, y bases de datos sobre PostgreSQL y Supabase, integrados en un solo producto." />
 <meta name="theme-color" content="#050507" />
 <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
 
@@ -103,19 +103,19 @@
       <p class="eyebrow" data-reveal>Ingeniería en Sistemas</p>
 
       <h1 class="hero__title" data-reveal>
-        Sistemas a medida,<br />
-        con criterio de ingeniería.
+        De la materia dispersa<br class="br-wide" />
+        emerge el sistema.
       </h1>
 
       <p class="hero__sub" data-reveal>
         Somos <strong>Ismael</strong>, <strong>Agustín</strong> y <strong>Luca</strong>.
         Construimos software que entra en producción y se queda ahí: sistemas de gestión,
-        automatizaciones y bases de datos pensadas para durar.
+        automatizaciones y bases de datos, pensados como un solo producto.
       </p>
 
       <div class="hero__actions" data-reveal>
-        <a class="btn btn--primary" href="#proyectos">Ver proyectos</a>
-        <a class="btn btn--ghost" href="#contacto">Contanos tu idea</a>
+        <a class="btn btn--primary" href="#proyectos" data-attract>Ver proyectos</a>
+        <a class="btn btn--ghost" href="#contacto" data-attract>Contanos tu idea</a>
       </div>
 
       <div class="hero__stack" data-reveal>
@@ -224,21 +224,24 @@
           </ul>
         </div>
 
-        <div class="merge" data-reveal>
+        <div class="merge" data-reveal data-inview>
           <div class="merge__col">
             <div class="merge__node">Sistema de gestión</div>
             <div class="merge__node">Automatización</div>
             <div class="merge__node">Base de datos</div>
           </div>
 
+          <!-- Las tres líneas se dibujan de izquierda a derecha cuando el
+               diagrama entra en pantalla (pathLength normaliza las curvas). -->
           <svg class="merge__lines" viewBox="0 0 100 220" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M0,34 C55,34 45,110 100,110" />
-            <path class="merge__pulse" d="M0,110 L100,110" />
-            <path d="M0,186 C55,186 45,110 100,110" />
+            <path d="M0,34 C55,34 45,110 100,110" pathLength="1" />
+            <path class="merge__pulse" d="M0,110 L100,110" pathLength="1" />
+            <path d="M0,186 C55,186 45,110 100,110" pathLength="1" />
           </svg>
 
           <div class="merge__result">
-            <svg class="mark" viewBox="0 0 240 240" aria-hidden="true"><use href="#ial-mark" /></svg>
+            <!-- Mientras está en pantalla, el logo atrae la materia del fondo. -->
+            <svg class="mark" viewBox="0 0 240 240" aria-hidden="true" data-attract-view><use href="#ial-mark" /></svg>
             <p class="merge__result-title">Una sola solución</p>
             <p class="merge__result-sub">Diseñada, construida y mantenida por el mismo equipo.</p>
           </div>
@@ -420,7 +423,7 @@
             </div>
 
             <div class="form__actions">
-              <button class="btn btn--primary" type="submit" id="formSubmit">
+              <button class="btn btn--primary" type="submit" id="formSubmit" data-attract>
                 <span id="formSubmitLabel">Preparar mensaje</span>
               </button>
               <p class="status-msg" id="formStatus" role="status" aria-live="polite"></p>

@@ -25,6 +25,9 @@
 
   [data-reveal] { opacity: 1 !important; transform: none !important; }
 
+  /* El diagrama aparece ya trazado. */
+  .merge__lines path { stroke-dashoffset: 0 !important; }
+
   /* El panel de navegacion aparece y desaparece sin desplazamiento. */
   .nav { transform: none !important; transition-delay: 0s !important; }
   .nav-toggle__bars::before,
